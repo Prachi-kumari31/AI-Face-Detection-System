@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>About | Deepfake Image Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+/* ================= VIDEO BACKGROUND ================= */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  overflow: hidden;
+}
+
+.video-background video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+/* Video Overlay - Creates dark tint */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 32, 39, 0.85) 0%,
+    rgba(32, 58, 67, 0.90) 50%,
+    rgba(44, 83, 100, 0.85) 100%
+  );
+  backdrop-filter: blur(3px);
+  z-index: 1;
+}
+
+/* Alternative gradient overlay styles */
+.video-overlay.dark {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.video-overlay.matrix {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 20, 40, 0.85),
+    rgba(0, 40, 60, 0.90),
+    rgba(0, 60, 80, 0.85)
+  );
+}
+
+/* Animated scan lines effect on video */
+.video-scanlines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 242, 254, 0.03) 0px,
+    transparent 2px,
+    transparent 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Fallback gradient if video fails to load */
+.video-fallback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  z-index: -4;
+}
+
+/* ===== ANIMATED PARTICLES (works with video) ===== */
+.bg-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(0, 242, 254, 0.5);
+  border-radius: 50%;
+  animation: float 15s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  10%, 90% {
+    opacity: 1;
+  }
+  50% {
+    transform: translate(100vw, -100vh);
+  }
+}
+
+.particle:nth-child(1) { left: 5%; animation-delay: 0s; animation-duration: 12s; }
+.particle:nth-child(2) { left: 15%; animation-delay: 2s; animation-duration: 14s; }
+.particle:nth-child(3) { left: 25%; animation-delay: 4s; animation-duration: 16s; }
+.particle:nth-child(4) { left: 35%; animation-delay: 1s; animation-duration: 13s; }
+.particle:nth-child(5) { left: 45%; animation-delay: 3s; animation-duration: 15s; }
+.particle:nth-child(6) { left: 55%; animation-delay: 5s; animation-duration: 17s; }
+.particle:nth-child(7) { left: 65%; animation-delay: 2s; animation-duration: 14s; }
+.particle:nth-child(8) { left: 75%; animation-delay: 4s; animation-duration: 16s; }
+.particle:nth-child(9) { left: 85%; animation-delay: 1s; animation-duration: 13s; }
+.particle:nth-child(10) { left: 95%; animation-delay: 3s; animation-duration: 15s; }
+/* ================= NAVBAR ================= */
+.navbar{
+    position:fixed;
+    top:0;
+    width:100%;
+    padding:15px 60px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,0.45);
+    backdrop-filter:blur(10px);
+    z-index:100;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:600;
+    color:#00ffd5;
+}
+
+.nav-links a{
+    margin-left:30px;
+    text-decoration:none;
+    color:#fff;
+    font-size:14px;
+    position:relative;
+}
+
+.nav-links a::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-5px;
+    width:0%;
+    height:2px;
+    background:#00ffd5;
+    transition:0.3s;
+}
+
+.nav-links a:hover::after{
+    width:100%;
+}
+
+/* ================= HERO ================= */
+.hero-section{
+    height:420px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding-top:80px;
+}
+
+.hero-content{
+    animation:fadeUp 1.2s ease;
+}
+
+.hero-content h1{
+    font-size:52px;
+    color:#37e9ff;
+    text-shadow:0 0 25px rgba(55,233,255,0.6);
+}
+
+.hero-content h1 span{
+    color:#00ffd5;
+    border-right:3px solid #00ffd5;
+    padding-right:6px;
+}
+
+.hero-content p{
+    margin:15px 0 30px;
+    font-size:18px;
+    opacity:0.9;
+}
+
+.hero-badges{
+    display:flex;
+    gap:20px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.badge{
+    background:rgba(255,255,255,0.15);
+    padding:12px 25px;
+    border-radius:30px;
+    animation:float 3s ease-in-out infinite;
+}
+
+.badge:nth-child(2){animation-delay:1s}
+.badge:nth-child(3){animation-delay:2s}
+
+/* ================= ABOUT ================= */
+.about-section{
+     padding:40px 20px;
+    margin-top:-60px; 
+    display:flex;
+    justify-content:center;
+}
+
+.about-card{
+    max-width:1000px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(14px);
+    border-radius:25px;
+    padding:45px;
+    box-shadow:0 25px 60px rgba(0,0,0,0.5);
+    animation:scaleFade 1.4s ease;
+}
+
+.about-card h2{
+    color:#00ffd5;
+    margin-bottom:15px;
+}
+
+.about-card p{
+    color:#f1f1f1;
+    font-size:16px;
+    font-weight:400;
+}
+
+.info-box ul li,
+.info-box ol li{
+    color:#e8faff;
+    font-weight:500;
+}
+
+.about-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:25px;
+}
+
+.info-box{
+    background:rgba(0,0,0,0.35);
+    padding:22px;
+    border-radius:18px;
+    transition:0.4s;
+    opacity:0;
+    animation:boxReveal 1s forwards;
+}
+ 
+.nav-link{
+    text-decoration: none;
+}
+.info-box:nth-child(1){animation-delay:.2s}
+.info-box:nth-child(2){animation-delay:.4s}
+.info-box:nth-child(3){animation-delay:.6s}
+.info-box:nth-child(4){animation-delay:.8s}
+
+.info-box:hover{
+    transform:translateY(-10px) scale(1.03);
+    background:rgba(0,247,255,0.15);
+    box-shadow:0 0 25px rgba(0,247,255,0.4);
+}
+
+.info-box h3{
+    color:#37e9ff;
+    margin-bottom:10px;
+}
+
+.info-box ul,
+.info-box ol{
+    margin-left:18px;
+    font-size:14px;
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(40px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes scaleFade{
+    from{opacity:0;transform:scale(.9)}
+    to{opacity:1;transform:scale(1)}
+}
+
+@keyframes boxReveal{
+    to{opacity:1}
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+    .navbar{padding:15px 30px}
+    .hero-content h1{font-size:34px}
+    .about-card{padding:30px}
+}
+/* ===== FOOTER ===== */
+.footer {
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  text-align: center;
+  font-size: 13px;
+  color: #999;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 10;
+   margin-top: auto;
+}
+
+.footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+.nav-link{
+    text-decoration:none;
+    
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND VIDEO -->
+ <div class="video-background">
+<video autoplay muted loop playsinline class="video-bg">
+    <source src="2127-155244168_small.mp4" type="video/mp4">
+</video>
+<!-- Video Overlay -->
+  <div class="video-overlay" id="videoOverlay"></div>
+  
+  <!-- Optional: Scan lines effect -->
+  <div class="video-scanlines"></div>
+</div>
+
+<!-- Fallback Gradient Background -->
+<div class="video-fallback"></div>
+
+<!-- ===== ANIMATED PARTICLES ===== -->
+<div class="bg-particles">
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+</div>
+
+
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">Deepfake AI</div>
+    <div class="nav-links">
+         <a class="nav-link" href="index.html">Home</a>
+       <a class="nav-link" href="about.html">About</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero-section">
+    <div class="hero-content">
+        <h1 id="typingText"></h1>
+        <p>Detect real vs AI-generated images with 95%+ accuracy</p>
+
+        <div class="hero-badges">
+           <div class="badge">⚡ Fast</div> 
+           <div class="badge">🔒 Secure</div> 
+           <div class="badge">🤖 AI Powered</div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section">
+<div class="about-card">
+
+<h2> About the Project</h2>
+<p>
+Deepfake Image Detection System is an AI-powered solution that identifies
+whether a facial image is REAL or AI-generated (FAKE). It helps reduce
+misinformation and digital fraud.
+</p>
+<br>
+<div class="about-grid">
+
+<div class="info-box">
+<h3> Objective</h3>
+<ul>
+<li>Detect fake images</li>
+<li>Generate confidence score</li>
+<li>Avoid duplicate processing</li>
+</ul>
+</div>
+
+<div class="info-box">
+<h3> Workflow</h3>
+<ol>
+<li>Upload image</li>
+<li>Check database</li>
+<li>AI prediction</li>
+<li>Save result</li>
+</ol>
+</div>
+
+<div class="info-box">
+<h3> Features</h3>
+<ul>
+<li>AI Detection</li>
+<li>Fast Response</li>
+<li>Secure Storage</li>
+</ul>
+</div>
+
+<div class="info-box">
+<h3> Technologies</h3>
+<ul>
+<li>Python</li>
+<li>CNN</li>
+<li>PyTorch</li>
+<li>OpenCV</li>
+<li>MySQL</li>
+</ul>
+</div>
+
+</div>
+</div>
+</section>
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  © 2026 AI Based Image Detection | Built with Deep Learning by <a href="#">DeepGuard AI</a>
+</div>
+<script>
+// ===== INFINITE TYPING EFFECT =====
+const text = "AI Based Image Detection System";
+let index = 0;
+let deleting = false;
+
+function typingLoop() {
+  const element = document.getElementById("typingText");
+  
+  if (!deleting) {
+    element.textContent = text.slice(0, index++);
+    if (index > text.length) {
+      deleting = true;
+      setTimeout(() => {}, 1500);
+    }
+  } else {
+    element.textContent = text.slice(0, index--);
+    if (index === 0) {
+      deleting = false;
+      setTimeout(() => {}, 500);
+    }
+  }
+  
+  setTimeout(typingLoop, deleting ? 50 : 100);
+}
+typingLoop();
+</script>
+</body>
+</html>
