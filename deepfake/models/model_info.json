@@ -1,0 +1,5 @@
+{
+  "model": "ResNet50 CNN",
+  "accuracy": "69.71%",
+  "training_time": "34.1 min"
+}
