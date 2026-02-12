@@ -1,0 +1,107 @@
+/* .result-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 30px;
+    border-radius: 16px;
+    margin-top: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.result-icon {
+    font-size: 60px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.result-label {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.result-label .real {
+    color: #00ff99;
+    text-shadow: 0 0 20px #00ff99;
+}
+
+.result-label .fake {
+    color: #ff4d4d;
+    text-shadow: 0 0 20px #ff4d4d;
+}
+
+.confidence {
+    margin: 20px 0;
+}
+
+.confidence-bar {
+    width: 100%;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.confidence-fill {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.confidence-fill.real {
+    background: linear-gradient(90deg, #00ff99, #00d4ff);
+}
+
+.confidence-fill.fake {
+    background: linear-gradient(90deg, #ff4d4d, #ff9800);
+}
+
+.probabilities {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    gap: 20px;
+}
+
+.prob-item {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.processing-time {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    margin-top: 15px;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid #00f2fe;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.error {
+    background: rgba(255, 77, 77, 0.2);
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+} */
+
+
+
